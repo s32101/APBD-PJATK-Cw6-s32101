@@ -52,4 +52,16 @@ public class AppointmentService(IConfiguration configuration)
         
         await command.ExecuteNonQueryAsync();
     }
+    
+    
+    public async Task DeleteAppointment(int id)
+    {
+        await using var connection = new SqlConnection(ConnectionString);
+        await connection.OpenAsync();
+        await using var command = 
+            new SqlCommand("DELETE FROM Appointments WHERE IdAppointment = @co", connection);
+        command.Parameters.AddWithValue("@co", id);    
+        if (await command.ExecuteNonQueryAsync() != 1)
+            throw new Exception("Obiekt nie istnieje lub wystąpił inny problem");
+    }
 }

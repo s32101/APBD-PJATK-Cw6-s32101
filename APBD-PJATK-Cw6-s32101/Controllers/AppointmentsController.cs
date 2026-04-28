@@ -38,6 +38,14 @@ public class AppointmentsController(AppointmentService appointmentService) : Con
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteAppointmentAsync(int id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await appointmentService.DeleteAppointment(id);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 }
