@@ -1,17 +1,18 @@
 using APBD_PJATK_Cw6_s32101.DTOs;
+using APBD_PJATK_Cw6_s32101.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APBD_PJATK_Cw6_s32101.Controllers;
 
 [ApiController]
 [Route("api/[controller]")] //api/appointments
-public class AppointmentsController : ControllerBase
+public class AppointmentsController(AppointmentService appointmentService) : ControllerBase
 {
     [HttpGet]
     public async Task<IActionResult> GetAppointmentsAsync
-        (string status, string patientLastName)
+        (string? status = null, string? patientLastName = null)
     {
-        throw new NotImplementedException();
+        return Ok(await appointmentService.GetAppointmentsAsync());
     }
 
     [HttpGet]
