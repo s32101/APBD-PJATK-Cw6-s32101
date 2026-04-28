@@ -25,7 +25,8 @@ public class AppointmentsController(AppointmentService appointmentService) : Con
     [HttpPost]
     public async Task<IActionResult> CreateAppointmentAsync([FromBody] CreateAppointmentRequestDto obj)
     {
-        throw new NotImplementedException();
+        await appointmentService.InsertAppointment(obj);
+        return Ok();
     }
 
     [HttpPut("{id:int}")]

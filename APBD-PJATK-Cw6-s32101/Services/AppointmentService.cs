@@ -35,4 +35,21 @@ public class AppointmentService(IConfiguration configuration)
         }
         return result;
     }
+
+    
+    public async Task InsertAppointment(CreateAppointmentRequestDto appointmentDTO)
+    {
+        await using var connection = new SqlConnection(ConnectionString);
+        await connection.OpenAsync();
+        await using var command = 
+            new SqlCommand("INSERT INTO Appointments (IdPatient, IdDoctor, AppointmentDate, Status, Reason, InternalNotes, CreatedAt) " +
+                           "VALUES (@idPat, @idDoc, @appDate, 'Scheduled', @reason, null, GETUTCDATE())", connection);
+        
+        command.Parameters.AddWithValue("@idPat", appointmentDTO.IdPatient);
+        command.Parameters.AddWithValue("@idDoc", appointmentDTO.IdDoctor);
+        command.Parameters.AddWithValue("@appDate",  appointmentDTO.AppointmentDate);
+        command.Parameters.AddWithValue("@reason",  appointmentDTO.Reason);
+        
+        await command.ExecuteNonQueryAsync();
+    }
 }
