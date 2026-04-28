@@ -64,4 +64,32 @@ public class AppointmentService(IConfiguration configuration)
         if (await command.ExecuteNonQueryAsync() != 1)
             throw new Exception("Obiekt nie istnieje lub wystąpił inny problem");
     }
+
+    public async Task UpdateAppointment(int id, UpdateAppointmentRequestDto appointmentDTO)
+    {
+        await using var connection = new SqlConnection(ConnectionString);
+        await connection.OpenAsync();
+        await using var command =
+            new SqlCommand(
+                "UPDATE appointments SET " +
+                "AppointmentDate = @appDate," +
+                "IdDoctor = @idDoc," +
+                "Reason = @reason," +
+                "Status = @status," +
+                "IdPatient = @idPat," +
+                "InternalNotes = @inNo" +
+                " WHERE IdAppointment = @id",
+                connection);
+        
+        command.Parameters.AddWithValue("@appDate", appointmentDTO.AppointmentDate);
+        command.Parameters.AddWithValue("@idDoc", appointmentDTO.IdDoctor);
+        command.Parameters.AddWithValue("@reason", appointmentDTO.Reason);
+        command.Parameters.AddWithValue("@status", appointmentDTO.Status);
+        command.Parameters.AddWithValue("@idPat", appointmentDTO.IdPatient);
+        command.Parameters.AddWithValue("@inNo", appointmentDTO.InternalNotes);
+        command.Parameters.AddWithValue("@id", id);
+
+        if (await command.ExecuteNonQueryAsync() != 1)
+            throw new Exception("Nie udało się wstawić jednego wiersza!");
+    }
 }

@@ -32,7 +32,8 @@ public class AppointmentsController(AppointmentService appointmentService) : Con
     [HttpPut("{id:int}")]
     public async Task<IActionResult> UpdateAppointmentAsync(int id, [FromBody] UpdateAppointmentRequestDto obj)
     {
-        throw new NotImplementedException();
+        await appointmentService.UpdateAppointment(id, obj);
+        return Ok();
     }
 
     [HttpDelete("{id:int}")]
