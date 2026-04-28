@@ -2,11 +2,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace APBD_PJATK_Cw6_s32101.Controllers;
 
-public class AppointmentController : Controller
+[ApiController]
+[Route("[controller]")]
+public class AppointmentController : ControllerBase
 {
-    // GET
+    [HttpGet(Name = "GetWeatherForecast")]
     public IActionResult Index()
     {
-        return View();
+        return Ok();
     }
 }
