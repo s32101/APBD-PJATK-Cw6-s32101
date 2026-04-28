@@ -1,12 +1,12 @@
 
 namespace APBD_PJATK_Cw6_s32101.DTOs;
 
-record AppointmentListDto(
-    IEnumerable<AppointmentShortDto> Appointments
-);
-
-record AppointmentShortDto
+public class AppointmentListDto
 {
-    public int Id { get; set; }
-    public DateTime Date { get; set; }
+    public int IdAppointment { get; set; }
+    public DateTime AppointmentDate { get; set; }
+    public string Status { get; set; } = string.Empty;
+    public string Reason { get; set; } = string.Empty;
+    public string PatientFullName { get; set; } = string.Empty;
+    public string PatientEmail { get; set; } = string.Empty;
 }
