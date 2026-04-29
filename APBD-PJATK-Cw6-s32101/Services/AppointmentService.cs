@@ -117,12 +117,22 @@ public class AppointmentService(IConfiguration configuration)
 
     public async Task<bool> IsPatientExistingAndActive(int id)
     {
-        throw new NotImplementedException(); //todo
+        await using var connection = new SqlConnection(ConnectionString);
+        await connection.OpenAsync();
+        await using var command = 
+            new SqlCommand("SELECT COUNT(1) FROM Patients where IdPatient = @id AND IsActive = 1", connection);
+        command.Parameters.AddWithValue("@id", id);
+        return (int)(await command.ExecuteScalarAsync() ?? 0) == 1;
     }
     
     public async Task<bool> IsDoctorExistingAndActive(int id)
     {
-        throw new NotImplementedException(); //todo
+        await using var connection = new SqlConnection(ConnectionString);
+        await connection.OpenAsync();
+        await using var command = 
+            new SqlCommand("SELECT COUNT(1) FROM Doctors where IdDoctor = @id AND IsActive = 1", connection);
+        command.Parameters.AddWithValue("@id", id);
+        return (int)(await command.ExecuteScalarAsync() ?? 0) == 1;
     }
 
     public async Task<bool> IsDoctorFreeAt(DateTime when)
