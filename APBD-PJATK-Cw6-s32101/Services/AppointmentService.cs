@@ -10,13 +10,35 @@ public class AppointmentService(IConfiguration configuration)
                                        throw new InvalidDataException(
                                            "Nieprawidłowa konfiguracja, brak ciągu definiującego połączenie z bazą danych.");
     
-    public async Task<IEnumerable<AppointmentListDto>> GetAppointmentsAsync()
+    public async Task<IEnumerable<AppointmentListDto>> GetAppointmentsAsync(int? id = null, string? status = null, string? patientLastName = null)
     {
         await using var connection = new SqlConnection(ConnectionString);
         await connection.OpenAsync();
         await using var command = new SqlCommand("SELECT * FROM Appointments a " +
                                                  "JOIN dbo.Patients p on p.IdPatient = a.IdPatient", connection);
 
+        List<string> conditions = [];
+        if (id != null)
+        {
+            conditions.Add("a.IdAppointment = @id");
+            command.Parameters.AddWithValue("@id", id);
+        }
+
+        if (status != null)
+        {
+            conditions.Add("a.Status = @status");
+            command.Parameters.AddWithValue("@status", status);
+        }
+
+        if (patientLastName != null)
+        {
+            conditions.Add("p.LastName = @patientLastName");
+            command.Parameters.AddWithValue("@patientLastName", patientLastName);
+        }
+
+        if (conditions.Count > 0)
+            command.CommandText += " WHERE " + string.Join(" AND ", conditions);
+        
         List<AppointmentListDto> result = [];
         await using var reader = await command.ExecuteReaderAsync();
         while (await reader.ReadAsync())

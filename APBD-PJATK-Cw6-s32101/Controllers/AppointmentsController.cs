@@ -12,14 +12,14 @@ public class AppointmentsController(AppointmentService appointmentService) : Con
     public async Task<IActionResult> GetAppointmentsAsync
         (string? status = null, string? patientLastName = null)
     {
-        return Ok(await appointmentService.GetAppointmentsAsync());
+        return Ok(await appointmentService.GetAppointmentsAsync(null, status, patientLastName));
     }
 
     [HttpGet]
     [Route("{id:int}")]
     public async Task<IActionResult> GetAppointmentByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        return Ok(await appointmentService.GetAppointmentsAsync(id));
     }
 
     [HttpPost]
