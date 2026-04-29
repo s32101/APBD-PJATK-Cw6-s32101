@@ -15,7 +15,7 @@ public class AppointmentService(IConfiguration configuration)
         await using var connection = new SqlConnection(ConnectionString);
         await connection.OpenAsync();
         await using var command = new SqlCommand("SELECT * FROM Appointments a " +
-                                                 "JOIN dbo.Patients p on p.IdPatient = a.IdPatient", connection);
+                                                 "JOIN Patients p on p.IdPatient = a.IdPatient", connection);
 
         List<string> conditions = [];
         if (id != null)

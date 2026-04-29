@@ -24,3 +24,9 @@ if (app.Environment.IsDevelopment())
 app.MapControllers();
 
 app.Run();
+
+// Baza szkoły
+//Data Source=db-mssql;Initial Catalog=2019SBD;Integrated Security=True;Trust Server Certificate=True
+
+// Test baza autoresetująca się na dockerze
+//Server=localhost,1433;Database=ClinicAdoNet;User Id=sa;Password=Bartek1234!;TrustServerCertificate=True
