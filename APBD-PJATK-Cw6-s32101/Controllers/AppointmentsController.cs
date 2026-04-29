@@ -42,7 +42,7 @@ public class AppointmentsController(AppointmentService appointmentService) : Con
         if (!await appointmentService.IsPatientExistingAndActive(obj.IdPatient))
             return NotFound("Pacjent nie istnieje albo nie jest aktywny");
         
-        if (!await appointmentService.IsDoctorExistingAndActive(obj.IdPatient))
+        if (!await appointmentService.IsDoctorExistingAndActive(obj.IdDoctor))
             return NotFound("Doktor nie istnieje albo nie jest aktywny");
         
         if (!await appointmentService.IsDoctorFreeAt(obj.IdDoctor, obj.AppointmentDate))
@@ -71,7 +71,7 @@ public class AppointmentsController(AppointmentService appointmentService) : Con
         if (!await appointmentService.IsPatientExistingAndActive(obj.IdPatient))
             return NotFound("Pacjent nie istnieje albo nie jest aktywny");
         
-        if (!await appointmentService.IsDoctorExistingAndActive(obj.IdPatient))
+        if (!await appointmentService.IsDoctorExistingAndActive(obj.IdDoctor))
             return NotFound("Doktor nie istnieje albo nie jest aktywny");
 
         var existing = (await appointmentService.GetAppointmentsAsync(id)).FirstOrDefault();
