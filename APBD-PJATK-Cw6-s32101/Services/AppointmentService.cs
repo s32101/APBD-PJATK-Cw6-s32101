@@ -135,8 +135,14 @@ public class AppointmentService(IConfiguration configuration)
         return (int)(await command.ExecuteScalarAsync() ?? 0) == 1;
     }
 
-    public async Task<bool> IsDoctorFreeAt(DateTime when)
+    public async Task<bool> IsDoctorFreeAt(int idDoctor, DateTime when)
     {
-        throw new NotImplementedException(); //todo
+        await using var connection = new SqlConnection(ConnectionString);
+        await connection.OpenAsync();
+        await using var command = 
+            new SqlCommand("SELECT COUNT(1) FROM Appointments where AppointmentDate = @when and IdDoctor = @idDoc", connection);
+        command.Parameters.AddWithValue("@when", when);
+        command.Parameters.AddWithValue("@idDoc", idDoctor);
+        return (int)(await command.ExecuteScalarAsync() ?? 1) == 0;
     }
 }

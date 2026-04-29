@@ -45,7 +45,7 @@ public class AppointmentsController(AppointmentService appointmentService) : Con
         if (!await appointmentService.IsDoctorExistingAndActive(obj.IdPatient))
             return NotFound("Doktor nie istnieje albo nie jest aktywny");
         
-        if (!await appointmentService.IsDoctorFreeAt(obj.AppointmentDate))
+        if (!await appointmentService.IsDoctorFreeAt(obj.IdDoctor, obj.AppointmentDate))
             return Conflict("Lekarz zajęty w terminie!");
         
         await appointmentService.InsertAppointment(obj);
@@ -83,7 +83,7 @@ public class AppointmentsController(AppointmentService appointmentService) : Con
             if (existing.Status.Equals("Completed", StringComparison.OrdinalIgnoreCase))
                 return Conflict("Zmiana terminu zrealizowanej wizyty jest niedopuszczalna");
 
-            if (!await appointmentService.IsDoctorFreeAt(obj.AppointmentDate))
+            if (!await appointmentService.IsDoctorFreeAt(obj.IdDoctor, obj.AppointmentDate))
                 return Conflict("Lekarz zajęty w terminie!");
         }
         
