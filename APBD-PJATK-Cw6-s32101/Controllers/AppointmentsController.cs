@@ -26,7 +26,7 @@ public class AppointmentsController(AppointmentService appointmentService) : Con
     public async Task<IActionResult> CreateAppointmentAsync([FromBody] CreateAppointmentRequestDto obj)
     {
         await appointmentService.InsertAppointment(obj);
-        return Ok();
+        return Created();
     }
 
     [HttpPut("{id:int}")]
@@ -42,7 +42,7 @@ public class AppointmentsController(AppointmentService appointmentService) : Con
         try
         {
             await appointmentService.DeleteAppointment(id);
-            return Ok();
+            return NoContent();
         }
         catch (Exception e)
         {
