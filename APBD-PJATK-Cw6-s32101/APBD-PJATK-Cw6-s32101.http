@@ -1,6 +1,123 @@
-@APBD_PJATK_Cw6_s32101_HostAddress = http://localhost:5226
+@baseUrl = http://localhost:5226
 
-GET {{APBD_PJATK_Cw6_s32101_HostAddress}}/weatherforecast/
-Accept: application/json
+### GET wszystkie wizyty
 
-###
+GET {{baseUrl}}/api/appointments
+
+### GET wizyty filtrowane po statusie
+
+GET {{baseUrl}}/api/appointments?status=Scheduled
+
+### GET wizyty filtrowane po nazwisku pacjenta
+
+GET {{baseUrl}}/api/appointments?patientLastName=Kowalska
+
+### GET wizyty po ID (istniejąca)
+
+GET {{baseUrl}}/api/appointments/1
+
+### GET wizyty po ID (nieistniejąca → 404)
+
+GET {{baseUrl}}/api/appointments/999
+
+### POST - poprawne utworzenie wizyty
+
+POST {{baseUrl}}/api/appointments
+Content-Type: application/json
+
+{
+  "idPatient": 1,
+  "idDoctor": 1,
+  "appointmentDate": "2026-05-10T10:00:00Z",
+  "reason": "Kontrola ciśnienia"
+}
+
+### POST - termin w przeszłości (400)
+
+POST {{baseUrl}}/api/appointments
+Content-Type: application/json
+
+{
+  "idPatient": 1,
+  "idDoctor": 1,
+  "appointmentDate": "2020-01-01T10:00:00Z",
+  "reason": "Błąd test"
+}
+
+### POST - nieaktywny pacjent (id=4 → IsActive=0)
+
+POST {{baseUrl}}/api/appointments
+Content-Type: application/json
+
+{
+  "idPatient": 4,
+  "idDoctor": 1,
+  "appointmentDate": "2026-05-10T10:00:00Z",
+  "reason": "Test pacjent nieaktywny"
+}
+
+### POST - konflikt lekarza (ten sam termin co istniejąca)
+
+POST {{baseUrl}}/api/appointments
+Content-Type: application/json
+
+{
+"idPatient": 1,
+"idDoctor": 1,
+"appointmentDate": "2026-05-01T10:00:00Z",
+"reason": "Konflikt terminu"
+}
+
+### PUT - poprawna aktualizacja wizyty
+
+PUT {{baseUrl}}/api/appointments/1
+Content-Type: application/json
+
+{
+  "idPatient": 1,
+  "idDoctor": 1,
+  "appointmentDate": "2026-05-11T12:00:00Z",
+  "status": "Scheduled",
+  "reason": "Zmiana terminu",
+  "internalNotes": "Pacjentkę boli głowa"
+}
+
+### PUT - zły status (400)
+
+PUT {{baseUrl}}/api/appointments/1
+Content-Type: application/json
+
+{
+  "idPatient": 1,
+  "idDoctor": 1,
+  "appointmentDate": "2026-05-11T12:00:00Z",
+  "status": "UnknownStatus",
+  "reason": "Błędny status",
+  "internalNotes": "Pacjentkę boli noga"
+}
+
+### PUT - zmiana Completed wizyty (powinna być Conflict)
+
+PUT {{baseUrl}}/api/appointments/4
+Content-Type: application/json
+
+{
+  "idPatient": 1,
+  "idDoctor": 1,
+  "appointmentDate": "2026-06-01T10:00:00Z",
+  "status": "Completed",
+  "reason": "Próba zmiany zakończonej wizyty",
+  "internalNotes": "Pacjentkę boli stópka"
+}
+
+### DELETE - poprawne usunięcie wizyty
+
+DELETE {{baseUrl}}/api/appointments/2
+
+### DELETE - próba usunięcia Completed (Conflict)
+
+DELETE {{baseUrl}}/api/appointments/4
+
+### DELETE - nieistniejąca wizyta (404)
+
+DELETE {{baseUrl}}/api/appointments/999
