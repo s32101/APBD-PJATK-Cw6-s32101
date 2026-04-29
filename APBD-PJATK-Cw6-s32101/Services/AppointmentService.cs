@@ -114,4 +114,19 @@ public class AppointmentService(IConfiguration configuration)
         if (await command.ExecuteNonQueryAsync() != 1)
             throw new Exception("Nie udało się wstawić jednego wiersza!");
     }
+
+    public async Task<bool> IsPatientExistingAndActive(int id)
+    {
+        throw new NotImplementedException(); //todo
+    }
+    
+    public async Task<bool> IsDoctorExistingAndActive(int id)
+    {
+        throw new NotImplementedException(); //todo
+    }
+
+    public async Task<bool> IsDoctorFreeAt(DateTime when)
+    {
+        throw new NotImplementedException(); //todo
+    }
 }
