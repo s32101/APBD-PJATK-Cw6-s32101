@@ -19,7 +19,11 @@ public class AppointmentsController(AppointmentService appointmentService) : Con
     [Route("{id:int}")]
     public async Task<IActionResult> GetAppointmentByIdAsync(int id)
     {
-        return Ok(await appointmentService.GetAppointmentsAsync(id));
+        var appointmentListDto = (await appointmentService.GetAppointmentsAsync(id))
+            .FirstOrDefault();
+        if (appointmentListDto == null)
+            return NotFound();
+        return Ok(appointmentListDto);
     }
 
     [HttpPost]
